@@ -1,0 +1,52 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "[0-9]*.[0-9]*.[0-9]*"
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+
+      - name: Build and validate the release
+        run: |
+          npm run build
+          npm run check
+          npm run verify-release
+          node scripts/release-notes.mjs
+
+      - name: Package manual installation
+        run: |
+          zip -j bases-spotlight-view-expanded.zip \
+            release/main.js release/manifest.json release/styles.css \
+            release/LICENSE release/NOTICE.md release/README.md \
+            release/UPSTREAM.md release/CHANGELOG.md release/versions.json
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" --verify-tag \
+            --title "$GITHUB_REF_NAME" --notes-file release/release-notes.md --draft \
+            release/main.js release/manifest.json release/styles.css \
+            release/LICENSE release/NOTICE.md bases-spotlight-view-expanded.zip
+
+          if [[ "$GITHUB_REF_NAME" == *-* ]]; then
+            gh release edit "$GITHUB_REF_NAME" --draft=false --prerelease
+          else
+            gh release edit "$GITHUB_REF_NAME" --draft=false --latest
+          fi

@@ -1,0 +1,10 @@
+{
+  "id": "bases-spotlight-view-expanded",
+  "name": "Bases Spotlight View Expanded",
+  "version": "0.1.7",
+  "minAppVersion": "1.10.0",
+  "description": "An expanded Spotlight layout for Obsidian Bases with type-aware property editing, true multi-value list/tag chips, one-click removal, and autocomplete.",
+  "author": "Maru",
+  "authorUrl": "https://marumimamori.me/",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,581 @@
+/*
+ * Bases Spotlight View Expanded
+ * Derived from Bases Spotlight View by Brendan Early (mymindstorm).
+ * Original repository: https://github.com/mymindstorm/obsidian-bases-spotlight-view
+ * MIT License — see LICENSE and NOTICE.md.
+ */
+
+.bases-view:has(> .spotlight-expanded-wrapper) {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden !important;
+  outline: none;
+  padding: 0 !important;
+}
+
+.spotlight-expanded-view {
+  position: relative;
+}
+
+.spotlight-expanded-wrapper {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--background-primary);
+}
+
+.spotlight-expanded-toolbar-button {
+  position: absolute;
+  top: 10px;
+  z-index: 100;
+  padding: 4px 9px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--button-radius, 5px);
+  background: var(--background-secondary);
+  color: var(--text-normal);
+  cursor: pointer;
+}
+
+.spotlight-expanded-toolbar-button:hover {
+  background: var(--background-modifier-hover);
+}
+
+.spotlight-expanded-sidebar-toggle { right: 10px; }
+.spotlight-expanded-fullscreen-toggle { right: 128px; }
+
+.spotlight-expanded-is-fullscreen .spotlight-expanded-toolbar-button {
+  display: none;
+}
+
+.spotlight-expanded-center {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  overflow: auto;
+  background: var(--background-primary);
+}
+
+.spotlight-expanded-center-no-padding {
+  padding: 0;
+  overflow: hidden;
+}
+
+.spotlight-expanded-center-content {
+  flex: 1;
+  width: 100%;
+  min-height: 0;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.spotlight-expanded-center-media-container,
+.spotlight-expanded-center-pdf-container {
+  max-width: none;
+  margin: 0;
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spotlight-expanded-media {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.spotlight-expanded-pdf-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  flex: 1;
+  border: 0;
+}
+
+.spotlight-expanded-resizer {
+  width: 4px;
+  flex: 0 0 4px;
+  background: var(--background-modifier-border);
+  cursor: col-resize;
+  transition: background-color 120ms ease;
+}
+
+.spotlight-expanded-resizer:hover,
+.spotlight-expanded-resizer:active {
+  background: var(--interactive-accent);
+}
+
+.spotlight-expanded-sidebar {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  min-width: 180px;
+  min-height: 0;
+  padding: 1rem;
+  overflow-y: auto;
+  position: relative;
+  background: var(--background-secondary);
+  border-left: 1px solid var(--background-modifier-border);
+}
+
+.spotlight-expanded-sidebar-title {
+  margin: 30px 0 18px;
+  color: var(--text-muted);
+  font-size: 1.2em;
+}
+
+.spotlight-expanded-property {
+  --spotlight-expanded-icon-size: 30px;
+  --spotlight-expanded-icon-gap: 7px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  min-width: 0;
+  gap: 5px;
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.spotlight-expanded-property-header {
+  display: flex;
+  align-items: center;
+  gap: var(--spotlight-expanded-icon-gap);
+  min-height: 20px;
+}
+
+.spotlight-expanded-property-name {
+  min-width: 0;
+  flex: 1;
+  color: var(--text-muted);
+  font-size: 0.86em;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  cursor: grab;
+}
+
+.spotlight-expanded-type-badge {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--background-modifier-hover);
+  color: var(--text-faint);
+  font-size: 0.68em;
+  text-transform: lowercase;
+}
+
+.spotlight-expanded-property-header .spotlight-expanded-type-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 var(--spotlight-expanded-icon-size);
+  width: var(--spotlight-expanded-icon-size);
+  height: var(--spotlight-expanded-icon-size);
+  padding: 3px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--button-radius, 5px);
+  box-shadow: var(--input-shadow, 0 1px 2px rgb(0 0 0 / 0.18));
+  background: var(--interactive-normal, var(--background-primary-alt));
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+.spotlight-expanded-type-icon svg { width: 16px; height: 16px; }
+.spotlight-expanded-property-header .spotlight-expanded-type-icon:hover:not(:disabled) {
+  background: var(--interactive-hover, var(--background-modifier-hover));
+  border-color: var(--background-modifier-border-hover, var(--background-modifier-border));
+  box-shadow: var(--input-shadow-hover, 0 1px 3px rgb(0 0 0 / 0.24));
+}
+.spotlight-expanded-type-icon:disabled { opacity: 0.75; cursor: default; }
+
+.spotlight-expanded-type-mismatch,
+.spotlight-expanded-recovered-draft {
+  margin: 5px 0;
+  color: var(--text-muted);
+  font-size: 0.82em;
+}
+
+.spotlight-expanded-mismatched-value,
+.spotlight-expanded-recovered-draft pre {
+  margin: 5px 0;
+  padding: 6px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 180px;
+  overflow: auto;
+  background: var(--background-primary);
+  border-radius: 5px;
+}
+
+.spotlight-expanded-property-value-container {
+  min-height: 28px;
+  max-height: none;
+  overflow: visible;
+}
+
+.spotlight-expanded-editor-container,
+.spotlight-expanded-readonly-value {
+  min-height: 28px;
+}
+
+/* Multi-value properties */
+.spotlight-expanded-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  min-height: 25px;
+}
+
+.spotlight-expanded-chip {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 24px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 999px;
+  background: var(--background-primary-alt);
+  color: var(--text-normal);
+  overflow: hidden;
+}
+
+.spotlight-expanded-chip-readonly {
+  padding-right: 8px;
+}
+
+.spotlight-expanded-chip-label {
+  min-width: 0;
+  padding: 2px 2px 2px 8px;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 18px;
+}
+
+.spotlight-expanded-chip-link {
+  color: var(--text-accent);
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.spotlight-expanded-chip-link:hover {
+  text-decoration: underline;
+}
+
+.spotlight-expanded-chip-remove {
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.spotlight-expanded-chip-remove:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-error);
+}
+
+.spotlight-expanded-chip-remove-hover {
+  opacity: 0;
+}
+
+.spotlight-expanded-chip:hover .spotlight-expanded-chip-remove-hover,
+.spotlight-expanded-chip:focus-within .spotlight-expanded-chip-remove-hover {
+  opacity: 1;
+}
+
+.spotlight-expanded-empty-value {
+  color: var(--text-faint);
+}
+
+.spotlight-expanded-property:has(> .spotlight-expanded-property-header > .spotlight-expanded-type-icon) .spotlight-expanded-empty-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex: 0 0 var(--spotlight-expanded-value-icon-width, var(--spotlight-expanded-icon-size));
+  width: var(--spotlight-expanded-value-icon-width, var(--spotlight-expanded-icon-size));
+  margin-inline-start: var(--spotlight-expanded-value-icon-offset, 0px);
+  min-height: 25px;
+}
+
+.spotlight-expanded-add-area {
+  position: relative;
+  margin-top: 6px;
+}
+
+.spotlight-expanded-add-button {
+  height: 26px;
+  padding: 2px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--text-accent);
+  font-size: 0.85em;
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.spotlight-expanded-add-button:hover {
+  background: var(--background-modifier-hover);
+}
+
+.spotlight-expanded-add-editor {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 5px;
+  align-items: center;
+}
+
+.spotlight-expanded-add-input,
+.spotlight-expanded-scalar-input,
+.spotlight-expanded-text-input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: var(--input-radius, 5px);
+  background: var(--background-modifier-form-field);
+  color: var(--text-normal);
+}
+
+.spotlight-expanded-add-input,
+.spotlight-expanded-scalar-input {
+  min-height: 30px;
+  padding: 4px 7px;
+}
+
+.spotlight-expanded-text-input {
+  min-height: 55px;
+  height: auto;
+  overflow: hidden;
+  resize: none;
+  padding: 6px 7px;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+.spotlight-expanded-input-error {
+  border-color: var(--text-error) !important;
+}
+
+.spotlight-expanded-add-confirm,
+.spotlight-expanded-add-cancel {
+  min-height: 28px;
+  padding: 2px 7px;
+}
+
+.spotlight-expanded-suggestions {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 300;
+  max-height: 190px;
+  overflow: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background: var(--background-primary);
+  box-shadow: var(--shadow-s);
+}
+
+.spotlight-expanded-suggestion {
+  padding: 6px 9px;
+  color: var(--text-normal);
+  cursor: pointer;
+}
+
+.spotlight-expanded-suggestion:hover,
+.spotlight-expanded-suggestion.is-active {
+  background: var(--background-modifier-hover);
+}
+
+.spotlight-expanded-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.spotlight-expanded-checkbox {
+  margin: 0;
+}
+
+.spotlight-expanded-property:has(> .spotlight-expanded-property-header > .spotlight-expanded-type-icon) .spotlight-expanded-checkbox-row {
+  display: grid;
+  grid-template-columns: var(--spotlight-expanded-value-icon-width, var(--spotlight-expanded-icon-size)) minmax(0, 1fr);
+  padding-inline-start: var(--spotlight-expanded-value-icon-offset, 0px);
+  column-gap: var(--spotlight-expanded-value-icon-gap, var(--spotlight-expanded-icon-gap));
+}
+
+.spotlight-expanded-property:has(> .spotlight-expanded-property-header > .spotlight-expanded-type-icon) .spotlight-expanded-checkbox {
+  margin: 0;
+  justify-self: center;
+}
+
+.spotlight-expanded-checkbox-label {
+  color: var(--text-muted);
+}
+
+.spotlight-expanded-complex-note {
+  margin-bottom: 5px;
+  color: var(--text-warning);
+  font-size: 0.8em;
+}
+
+.spotlight-expanded-complex-value,
+.spotlight-expanded-license-text {
+  margin: 0;
+  padding: 8px;
+  overflow: auto;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background: var(--background-primary);
+  color: var(--text-muted);
+  white-space: pre-wrap;
+  font-size: 0.8em;
+}
+
+.spotlight-expanded-hyperlink-value {
+  color: var(--text-accent);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.spotlight-expanded-property-resizer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 8px;
+  z-index: 10;
+  cursor: ns-resize;
+}
+
+.spotlight-expanded-property-resizer:hover,
+.spotlight-expanded-property-resizer:active {
+  background: color-mix(in srgb, var(--interactive-accent) 35%, transparent);
+}
+
+.spotlight-expanded-property-dragging { opacity: 0.45; }
+.spotlight-expanded-property-drag-over { border-top: 2px solid var(--interactive-accent); }
+.spotlight-expanded-property-drag-below { border-bottom: 2px solid var(--interactive-accent); }
+
+.spotlight-expanded-nav-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 12px;
+}
+
+.spotlight-expanded-nav-btn {
+  padding: 4px 10px;
+}
+
+.spotlight-expanded-count {
+  min-width: 0;
+  color: var(--text-faint);
+  font-size: 0.82em;
+  text-align: center;
+}
+
+.spotlight-expanded-empty,
+.spotlight-expanded-error-message {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Settings sub-tabs */
+.spotlight-expanded-settings-tabs {
+  display: flex;
+  gap: 6px;
+  margin: 8px 0 18px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.spotlight-expanded-settings-tab {
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  box-shadow: none;
+}
+
+.spotlight-expanded-settings-tab:hover {
+  background: var(--background-modifier-hover);
+  color: var(--text-normal);
+}
+
+.spotlight-expanded-settings-tab.is-active {
+  background: var(--interactive-accent);
+  color: var(--text-on-accent);
+}
+
+.spotlight-expanded-settings-body h3 {
+  margin-top: 22px;
+}
+
+.spotlight-expanded-setting-reset:focus-visible {
+  outline: 2px solid var(--interactive-accent);
+  outline-offset: 2px;
+}
+
+.spotlight-expanded-credit-card {
+  padding: 12px 14px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 8px;
+  background: var(--background-secondary);
+}
+
+.spotlight-expanded-credit-card p {
+  margin-top: 0;
+}
+
+.spotlight-expanded-upstream-link {
+  color: var(--text-accent);
+}
+
+.spotlight-expanded-license-text {
+  max-height: 360px;
+}
+
+@media (max-width: 700px) {
+  .spotlight-expanded-sidebar {
+    min-width: 160px;
+  }
+  .spotlight-expanded-fullscreen-toggle {
+    right: 118px;
+  }
+  .spotlight-expanded-chip-label {
+    max-width: 180px;
+  }
+}

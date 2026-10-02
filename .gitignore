@@ -1,0 +1,18 @@
+# Local settings, credentials, and tools
+data.json
+.env
+.env.*
+node_modules/
+.vscode/
+.idea/
+*.log
+.DS_Store
+Thumbs.db
+
+# Local backups, generated install bundles, and verification captures
+backups/
+release/
+*.zip
+tests/*.png
+
+# Root main.js is committed so the installable source is easy to inspect.
