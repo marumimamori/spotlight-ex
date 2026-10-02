@@ -34,6 +34,9 @@ Browse notes, images, and PDFs in an Obsidian Base and edit their properties in 
 
 [BRAT documentation](https://tfthacker.com/BRAT) explains installation and automatic updates.
 
+> [!NOTE]
+> This fork was **vibecoded** with AI assistance.
+
 ### Manual Installation
 
 1. Download the install ZIP from the [latest release](https://github.com/marumimamori/spotlight-ex/releases/latest), or download `main.js`, `manifest.json`, and `styles.css` individually.
