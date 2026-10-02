@@ -14,6 +14,7 @@ requireCondition(/^\d+\.\d+\.\d+(?:-[\da-z.-]+)?$/i.test(expected), 'Release tag
 requireCondition(manifest.version === expected, 'Manifest version does not match the release tag.');
 requireCondition(pkg.version === expected, 'Package version does not match the release tag.');
 requireCondition(manifest.id === 'bases-spotlight-view-expanded', 'Unexpected plugin ID.');
+requireCondition(manifest.name === 'Spotlight EX', 'Unexpected plugin display name.');
 requireCondition(versions[expected] === manifest.minAppVersion, 'versions.json is missing the current minimum app version.');
 const readme = (await read('README.md')).toString();
 requireCondition(readme.includes(`**Current version:** \`${expected}\``), 'README current version does not match the release.');

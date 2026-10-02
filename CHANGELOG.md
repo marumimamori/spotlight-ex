@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.1.8 — 2026-10-02
+
+- Rename the plugin, layout, repository, and current documentation to Spotlight EX.
+- Add a Setup tab in plugin settings with Base creation, layout selection, properties, filters, sorting, and preview configuration instructions.
+- Expand the repository's Base setup guide and explain per-view options versus global settings.
+- Keep the persisted plugin ID and view type so existing settings and Base views continue working.
+- Preserve Brendan Early / mymindstorm's original creator attribution and MIT license.
+
 ## 0.1.7 — 2026-10-02
 
 - Restore the darker rounded box, border, and shadow around property type icons, with a lighter hover state using theme button colors.

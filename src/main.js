@@ -1,5 +1,5 @@
 /*
- * Bases Spotlight View Expanded
+ * Spotlight EX
  *
  * Derived from "Obsidian Bases Spotlight View" by Brendan Early (mymindstorm):
  * https://github.com/mymindstorm/obsidian-bases-spotlight-view
@@ -20,7 +20,9 @@ const {
   setIcon,
 } = require('obsidian');
 
+// Persisted identifier: retain it so existing Base views survive the branding change.
 const VIEW_TYPE = 'bases-spotlight-view-expanded';
+const REPOSITORY_URL = 'https://github.com/marumimamori/spotlight-ex';
 const UPSTREAM_URL = 'https://github.com/mymindstorm/obsidian-bases-spotlight-view';
 
 const ORIGINAL_MIT_LICENSE = `MIT License
@@ -203,7 +205,7 @@ function displayWikiLink(value) {
   return alias || target.split('#')[0].split('/').pop() || target;
 }
 
-class SpotlightExpandedView extends BasesView {
+class SpotlightEXView extends BasesView {
   constructor(controller, containerEl, plugin) {
     super(controller);
     this.type = VIEW_TYPE;
@@ -224,12 +226,12 @@ class SpotlightExpandedView extends BasesView {
     this.unloaded = false;
 
     this.containerEl.tabIndex = 0;
-    this.containerEl.addClass('spotlight-expanded-view');
+    this.containerEl.addClass('spotlight-ex-view');
 
-    this.wrapperEl = this.containerEl.createDiv('spotlight-expanded-wrapper');
-    this.centerEl = this.wrapperEl.createDiv('spotlight-expanded-center');
-    this.resizerEl = this.wrapperEl.createDiv('spotlight-expanded-resizer');
-    this.sidebarEl = this.wrapperEl.createDiv('spotlight-expanded-sidebar');
+    this.wrapperEl = this.containerEl.createDiv('spotlight-ex-wrapper');
+    this.centerEl = this.wrapperEl.createDiv('spotlight-ex-center');
+    this.resizerEl = this.wrapperEl.createDiv('spotlight-ex-resizer');
+    this.sidebarEl = this.wrapperEl.createDiv('spotlight-ex-sidebar');
 
     this.resizerEl.addEventListener('mousedown', (event) => this.beginSidebarResize(event));
     this.containerEl.addEventListener('keydown', (event) => this.handleKeyDown(event));
@@ -240,13 +242,13 @@ class SpotlightExpandedView extends BasesView {
 
     this.toggleBtn = this.containerEl.createEl('button', {
       text: 'Toggle Sidebar',
-      cls: 'spotlight-expanded-toolbar-button spotlight-expanded-sidebar-toggle',
+      cls: 'spotlight-ex-toolbar-button spotlight-ex-sidebar-toggle',
     });
     this.toggleBtn.addEventListener('click', () => this.toggleSidebar());
 
     this.fullscreenBtn = this.containerEl.createEl('button', {
       text: 'Full Screen',
-      cls: 'spotlight-expanded-toolbar-button spotlight-expanded-fullscreen-toggle',
+      cls: 'spotlight-ex-toolbar-button spotlight-ex-fullscreen-toggle',
     });
     this.fullscreenBtn.addEventListener('click', () => this.toggleFullscreen());
 
@@ -254,7 +256,7 @@ class SpotlightExpandedView extends BasesView {
       const doc = this.containerEl.ownerDocument;
       const active = doc.fullscreenElement === this.containerEl;
       this.fullscreenBtn.setText(active ? 'Exit Full Screen' : 'Full Screen');
-      this.containerEl.toggleClass('spotlight-expanded-is-fullscreen', active);
+      this.containerEl.toggleClass('spotlight-ex-is-fullscreen', active);
     };
     this.containerEl.ownerDocument.addEventListener('fullscreenchange', this.fullscreenHandler);
     this.plugin.views?.add(this);
@@ -274,7 +276,7 @@ class SpotlightExpandedView extends BasesView {
     return this.activatingPane || this.pendingWrites
       || this.sidebarEl.contains(this.containerEl.ownerDocument.activeElement)
       || this.sidebarEl.querySelector('[data-dirty="true"]')
-      || Array.from(this.sidebarEl.querySelectorAll('.spotlight-expanded-add-input')).some((input) => input.value.trim());
+      || Array.from(this.sidebarEl.querySelectorAll('.spotlight-ex-add-input')).some((input) => input.value.trim());
   }
 
   activatePane() {
@@ -366,7 +368,7 @@ class SpotlightExpandedView extends BasesView {
       if (!doc.fullscreenElement) await this.containerEl.requestFullscreen();
       else await doc.exitFullscreen();
     } catch (err) {
-      console.error('[Bases Spotlight View Expanded] Fullscreen failed', err);
+      console.error('[Spotlight EX] Fullscreen failed', err);
     }
   }
 
@@ -410,7 +412,7 @@ class SpotlightExpandedView extends BasesView {
 
     const entries = this.filteredEntries;
     if (!entries.length) {
-      this.centerEl.createDiv({ text: 'No entries found.', cls: 'spotlight-expanded-empty' });
+      this.centerEl.createDiv({ text: 'No entries found.', cls: 'spotlight-ex-empty' });
       return;
     }
 
@@ -423,7 +425,7 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderCenter(entry, token) {
-    const centerContent = this.centerEl.createDiv('spotlight-expanded-center-content');
+    const centerContent = this.centerEl.createDiv('spotlight-ex-center-content');
     const spotlightProperty = this.config?.get?.('spotlight_property');
     let previewFile = null;
 
@@ -445,8 +447,8 @@ class SpotlightExpandedView extends BasesView {
     if (!previewFile && entry.file instanceof TFile) previewFile = this.resolvePreviewFile(entry.file);
 
     if (!previewFile) {
-      this.centerEl.removeClass('spotlight-expanded-center-no-padding');
-      centerContent.createDiv({ text: 'Cannot read file content.', cls: 'spotlight-expanded-error-message' });
+      this.centerEl.removeClass('spotlight-ex-center-no-padding');
+      centerContent.createDiv({ text: 'Cannot read file content.', cls: 'spotlight-ex-error-message' });
       return;
     }
 
@@ -480,22 +482,22 @@ class SpotlightExpandedView extends BasesView {
 
   renderSidebar(entry, entries) {
     this.sidebarEl.style.width = `${this.sidebarWidth}px`;
-    this.sidebarEl.createEl('h3', { text: 'Attributes', cls: 'spotlight-expanded-sidebar-title' });
+    this.sidebarEl.createEl('h3', { text: 'Attributes', cls: 'spotlight-ex-sidebar-title' });
 
     const properties = this.getVisiblePropertyIds();
     for (const propId of properties) this.renderProperty(entry, entries, propId, properties);
 
-    const nav = this.sidebarEl.createDiv('spotlight-expanded-nav-container');
-    const prev = nav.createEl('button', { text: 'Previous', cls: 'spotlight-expanded-nav-btn' });
+    const nav = this.sidebarEl.createDiv('spotlight-ex-nav-container');
+    const prev = nav.createEl('button', { text: 'Previous', cls: 'spotlight-ex-nav-btn' });
     prev.disabled = this.currentIndex === 0;
     prev.addEventListener('click', () => {
       this.currentIndex = Math.max(0, this.currentIndex - 1);
       this.render();
     });
 
-    nav.createDiv({ text: `Entry ${this.currentIndex + 1} of ${entries.length}`, cls: 'spotlight-expanded-count' });
+    nav.createDiv({ text: `Entry ${this.currentIndex + 1} of ${entries.length}`, cls: 'spotlight-ex-count' });
 
-    const next = nav.createEl('button', { text: 'Next', cls: 'spotlight-expanded-nav-btn' });
+    const next = nav.createEl('button', { text: 'Next', cls: 'spotlight-ex-nav-btn' });
     next.disabled = this.currentIndex >= entries.length - 1;
     next.addEventListener('click', () => {
       this.currentIndex = Math.min(entries.length - 1, this.currentIndex + 1);
@@ -504,24 +506,24 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderProperty(entry, entries, propId, orderedProperties) {
-    const propEl = this.sidebarEl.createDiv('spotlight-expanded-property');
+    const propEl = this.sidebarEl.createDiv('spotlight-ex-property');
     propEl.dataset.prop = propId;
 
-    const header = propEl.createDiv('spotlight-expanded-property-header');
+    const header = propEl.createDiv('spotlight-ex-property-header');
     const displayName = typeof this.config?.getDisplayName === 'function'
       ? this.config.getDisplayName(propId)
       : this.getPropName(propId);
-    const nameEl = header.createDiv({ text: displayName || this.getPropName(propId), cls: 'spotlight-expanded-property-name' });
+    const nameEl = header.createDiv({ text: displayName || this.getPropName(propId), cls: 'spotlight-ex-property-name' });
 
     nameEl.draggable = true;
     nameEl.addEventListener('dragstart', (event) => {
       event.dataTransfer?.setData('text/plain', propId);
-      propEl.addClass('spotlight-expanded-property-dragging');
+      propEl.addClass('spotlight-ex-property-dragging');
     });
     nameEl.addEventListener('dragend', () => {
-      propEl.removeClass('spotlight-expanded-property-dragging');
-      this.sidebarEl.querySelectorAll('.spotlight-expanded-property-drag-over, .spotlight-expanded-property-drag-below')
-        .forEach((el) => el.removeClasses(['spotlight-expanded-property-drag-over', 'spotlight-expanded-property-drag-below']));
+      propEl.removeClass('spotlight-ex-property-dragging');
+      this.sidebarEl.querySelectorAll('.spotlight-ex-property-drag-over, .spotlight-ex-property-drag-below')
+        .forEach((el) => el.removeClasses(['spotlight-ex-property-drag-over', 'spotlight-ex-property-drag-below']));
     });
 
     const editable = isEditablePropertyId(propId);
@@ -536,7 +538,7 @@ class SpotlightExpandedView extends BasesView {
       const details = PROPERTY_TYPES[propType] || { name: propType, icon: 'lucide-circle-help' };
       const widget = editable && key ? this.getPropertyWidget(key, rawValue) : null;
       const icon = header.createEl('button', {
-        cls: 'spotlight-expanded-type-icon clickable-icon',
+        cls: 'spotlight-ex-type-icon clickable-icon',
         attr: { title: `Property type: ${details.name}`, 'aria-label': `Change ${displayName || key} property type (${details.name})` },
       });
       setIcon(icon, widget?.icon || details.icon);
@@ -544,12 +546,12 @@ class SpotlightExpandedView extends BasesView {
       icon.disabled = !editable || !this.app.metadataTypeManager?.setType || propType === 'complex'
         || ['tags', 'aliases', 'cssclasses'].includes(key?.toLowerCase());
       icon.addEventListener('click', (event) => this.openPropertyTypeMenu(event, key, propType));
-      header.createSpan({ text: details.name, cls: 'spotlight-expanded-type-badge' });
+      header.createSpan({ text: details.name, cls: 'spotlight-ex-type-badge' });
     }
 
     this.addDragDropHandlers(propEl, propId, orderedProperties);
 
-    const valueContainer = propEl.createDiv('spotlight-expanded-property-value-container');
+    const valueContainer = propEl.createDiv('spotlight-ex-property-value-container');
     const savedHeight = this.plugin.settings.propertyHeights[propId];
     if (savedHeight) {
       valueContainer.style.minHeight = `${savedHeight}px`;
@@ -569,7 +571,7 @@ class SpotlightExpandedView extends BasesView {
     this.addHeightResizer(propEl, valueContainer, propId);
     const draft = this.recoveredDrafts.get(`${entry.file.path}\0${propId}`);
     if (draft) {
-      const details = propEl.createEl('details', { cls: 'spotlight-expanded-recovered-draft' });
+      const details = propEl.createEl('details', { cls: 'spotlight-ex-recovered-draft' });
       details.createEl('summary', { text: 'Unfinished value from the previous type' });
       details.createEl('pre', { text: draft });
     }
@@ -578,10 +580,10 @@ class SpotlightExpandedView extends BasesView {
   }
 
   alignPropertyControls(property) {
-    const icon = property.querySelector('.spotlight-expanded-type-icon');
-    const values = property.querySelector('.spotlight-expanded-property-value-container');
-    if (!icon || !values.querySelector('.spotlight-expanded-chip-list, .spotlight-expanded-checkbox, .spotlight-expanded-empty-value')) return;
-    const name = property.querySelector('.spotlight-expanded-property-name');
+    const icon = property.querySelector('.spotlight-ex-type-icon');
+    const values = property.querySelector('.spotlight-ex-property-value-container');
+    if (!icon || !values.querySelector('.spotlight-ex-chip-list, .spotlight-ex-checkbox, .spotlight-ex-empty-value')) return;
+    const name = property.querySelector('.spotlight-ex-property-name');
     const win = property.ownerDocument.defaultView;
     const align = () => {
       if (!property.isConnected) return;
@@ -596,7 +598,7 @@ class SpotlightExpandedView extends BasesView {
         'gap': (name.getBoundingClientRect().left - iconRect.right) / scale,
       };
       for (const [key, measurement] of Object.entries(measurements)) {
-        const variable = `--spotlight-expanded-value-icon-${key}`;
+        const variable = `--spotlight-ex-value-icon-${key}`;
         const value = `${measurement}px`;
         if (property.style.getPropertyValue(variable) !== value) property.style.setProperty(variable, value);
       }
@@ -616,7 +618,7 @@ class SpotlightExpandedView extends BasesView {
     if (!entry) return;
     const order = this.getVisiblePropertyIds();
     const doc = this.containerEl.ownerDocument;
-    for (const row of Array.from(this.sidebarEl.querySelectorAll('.spotlight-expanded-property'))) {
+    for (const row of Array.from(this.sidebarEl.querySelectorAll('.spotlight-ex-property'))) {
       const propId = row.dataset.prop;
       const key = frontmatterKeyFromPropertyId(propId);
       if (!key || !isEditablePropertyId(propId) || !order.includes(propId)) continue;
@@ -625,7 +627,7 @@ class SpotlightExpandedView extends BasesView {
       const type = this.getPropertyType(key, raw);
       const typeChanged = type !== row.dataset.type;
       const draftInput = row.querySelector('[data-dirty="true"]')
-        || row.querySelector('.spotlight-expanded-add-input');
+        || row.querySelector('.spotlight-ex-add-input');
       const draft = draftInput?.value ?? draftInput?.textContent ?? '';
       const focused = row.contains(doc.activeElement);
       if (!typeChanged && (focused || draftInput?.dataset.dirty === 'true' || draft.trim())) continue;
@@ -637,7 +639,7 @@ class SpotlightExpandedView extends BasesView {
       const replacement = this.renderProperty(entry, entries, propId, order);
       row.replaceWith(replacement);
       if (focused) {
-        const control = replacement.querySelector('textarea, input, select, .spotlight-expanded-add-button');
+        const control = replacement.querySelector('textarea, input, select, .spotlight-ex-add-button');
         control?.focus();
       }
     }
@@ -665,19 +667,19 @@ class SpotlightExpandedView extends BasesView {
       event.preventDefault();
       const rect = propEl.getBoundingClientRect();
       if (event.clientY < rect.top + rect.height / 2) {
-        propEl.addClass('spotlight-expanded-property-drag-over');
-        propEl.removeClass('spotlight-expanded-property-drag-below');
+        propEl.addClass('spotlight-ex-property-drag-over');
+        propEl.removeClass('spotlight-ex-property-drag-below');
       } else {
-        propEl.addClass('spotlight-expanded-property-drag-below');
-        propEl.removeClass('spotlight-expanded-property-drag-over');
+        propEl.addClass('spotlight-ex-property-drag-below');
+        propEl.removeClass('spotlight-ex-property-drag-over');
       }
     });
     propEl.addEventListener('dragleave', () => {
-      propEl.removeClasses(['spotlight-expanded-property-drag-over', 'spotlight-expanded-property-drag-below']);
+      propEl.removeClasses(['spotlight-ex-property-drag-over', 'spotlight-ex-property-drag-below']);
     });
     propEl.addEventListener('drop', async (event) => {
       event.preventDefault();
-      propEl.removeClasses(['spotlight-expanded-property-drag-over', 'spotlight-expanded-property-drag-below']);
+      propEl.removeClasses(['spotlight-ex-property-drag-over', 'spotlight-ex-property-drag-below']);
       const dragged = event.dataTransfer?.getData('text/plain');
       if (!dragged || dragged === propId) return;
 
@@ -695,7 +697,7 @@ class SpotlightExpandedView extends BasesView {
   }
 
   addHeightResizer(propEl, valueContainer, propId) {
-    const resizeHandle = propEl.createDiv('spotlight-expanded-property-resizer');
+    const resizeHandle = propEl.createDiv('spotlight-ex-property-resizer');
     let startY = 0;
     let startHeight = 0;
     const doc = this.containerEl.ownerDocument;
@@ -742,7 +744,7 @@ class SpotlightExpandedView extends BasesView {
       const created = await this.app.vault.create(sidecarPath, '');
       return created instanceof TFile ? created : null;
     } catch (err) {
-      console.error('[Bases Spotlight View Expanded] Could not create sidecar', err);
+      console.error('[Spotlight EX] Could not create sidecar', err);
       new Notice(`Could not create metadata sidecar: ${sidecarPath}`);
       return null;
     }
@@ -783,10 +785,10 @@ class SpotlightExpandedView extends BasesView {
 
   renderTypedEditor(entry, entries, key, propId, type, rawValue, container) {
     container.empty();
-    container.addClass('spotlight-expanded-editor-container');
+    container.addClass('spotlight-ex-editor-container');
     if (type !== 'complex' && !validPropertyValue(type, rawValue)) {
-      container.createDiv({ text: `Stored value does not match ${PROPERTY_TYPES[type]?.name || type}. Enter a new value to replace it.`, cls: 'spotlight-expanded-type-mismatch' });
-      container.createEl('pre', { text: toComparableString(rawValue), cls: 'spotlight-expanded-mismatched-value' });
+      container.createDiv({ text: `Stored value does not match ${PROPERTY_TYPES[type]?.name || type}. Enter a new value to replace it.`, cls: 'spotlight-ex-type-mismatch' });
+      container.createEl('pre', { text: toComparableString(rawValue), cls: 'spotlight-ex-mismatched-value' });
       rawValue = undefined;
     }
 
@@ -825,7 +827,7 @@ class SpotlightExpandedView extends BasesView {
 
   renderMultiValueEditor(entry, entries, key, type, rawValue, container) {
     const values = rawValue == null ? [] : (Array.isArray(rawValue) ? [...rawValue] : [rawValue]);
-    const listEl = container.createDiv('spotlight-expanded-chip-list');
+    const listEl = container.createDiv('spotlight-ex-chip-list');
     const updateValues = async (update) => {
       const result = await this.writeProperty(entry.file, key, (stored) => {
         const current = stored == null ? [] : (Array.isArray(stored) ? [...stored] : [stored]);
@@ -841,21 +843,21 @@ class SpotlightExpandedView extends BasesView {
       const restoreFocus = listEl.contains(listEl.ownerDocument.activeElement);
       listEl.empty();
       if (!values.length) {
-        listEl.createSpan({ text: '—', cls: 'spotlight-expanded-empty-value' });
+        listEl.createSpan({ text: '—', cls: 'spotlight-ex-empty-value' });
       }
 
       values.forEach((value) => {
-        const chip = listEl.createDiv('spotlight-expanded-chip');
-        const label = chip.createSpan('spotlight-expanded-chip-label');
+        const chip = listEl.createDiv('spotlight-ex-chip');
+        const label = chip.createSpan('spotlight-ex-chip-label');
         this.renderChipLabel(label, value, type, entry.file);
 
         const remove = chip.createEl('button', {
           text: '×',
-          cls: 'spotlight-expanded-chip-remove',
+          cls: 'spotlight-ex-chip-remove',
           attr: { 'aria-label': `Remove ${toComparableString(value)}`, title: 'Remove value' },
         });
         remove.addEventListener('mousedown', (event) => event.preventDefault());
-        if (!this.plugin.settings.removeButtonAlwaysVisible) remove.addClass('spotlight-expanded-chip-remove-hover');
+        if (!this.plugin.settings.removeButtonAlwaysVisible) remove.addClass('spotlight-ex-chip-remove-hover');
         remove.addEventListener('click', async (event) => {
           event.preventDefault();
           event.stopPropagation();
@@ -867,9 +869,9 @@ class SpotlightExpandedView extends BasesView {
         });
       });
       if (restoreFocus) {
-        const next = container.querySelector('.spotlight-expanded-add-input')
-          || listEl.querySelector('.spotlight-expanded-chip-remove')
-          || container.querySelector('.spotlight-expanded-add-button');
+        const next = container.querySelector('.spotlight-ex-add-input')
+          || listEl.querySelector('.spotlight-ex-chip-remove')
+          || container.querySelector('.spotlight-ex-add-button');
         if (next) next.focus();
         else { listEl.tabIndex = -1; listEl.focus(); }
       }
@@ -877,8 +879,8 @@ class SpotlightExpandedView extends BasesView {
     renderChips();
 
     if (this.plugin.settings.showAddValueButton) {
-      const addArea = container.createDiv('spotlight-expanded-add-area');
-      const addButton = addArea.createEl('button', { text: '+ Add value', cls: 'spotlight-expanded-add-button' });
+      const addArea = container.createDiv('spotlight-ex-add-area');
+      const addButton = addArea.createEl('button', { text: '+ Add value', cls: 'spotlight-ex-add-button' });
       addButton.addEventListener('click', () => {
         addButton.style.display = 'none';
         this.openAddValueEditor(entry, entries, key, type, values, addArea, addButton, updateValues);
@@ -889,7 +891,7 @@ class SpotlightExpandedView extends BasesView {
   renderChipLabel(label, value, type, sourceFile) {
     const stringValue = toComparableString(value);
     if (isWikiLinkString(stringValue)) {
-      label.addClass('spotlight-expanded-chip-link');
+      label.addClass('spotlight-ex-chip-link');
       label.setText(displayWikiLink(stringValue));
       label.title = stringValue;
       label.addEventListener('click', (event) => {
@@ -920,15 +922,15 @@ class SpotlightExpandedView extends BasesView {
   }
 
   openAddValueEditor(entry, entries, key, type, currentValues, addArea, addButton, updateValues) {
-    const editor = addArea.createDiv('spotlight-expanded-add-editor');
+    const editor = addArea.createDiv('spotlight-ex-add-editor');
     const input = editor.createEl('input', {
       type: 'text',
-      cls: 'spotlight-expanded-add-input',
+      cls: 'spotlight-ex-add-input',
       attr: { placeholder: type === 'tags' ? 'Add tag…' : 'Add value…' },
     });
-    const add = editor.createEl('button', { text: 'Add', cls: 'spotlight-expanded-add-confirm' });
-    const cancel = editor.createEl('button', { text: '×', cls: 'spotlight-expanded-add-cancel', attr: { title: 'Cancel' } });
-    const suggestions = editor.createDiv('spotlight-expanded-suggestions');
+    const add = editor.createEl('button', { text: 'Add', cls: 'spotlight-ex-add-confirm' });
+    const cancel = editor.createEl('button', { text: '×', cls: 'spotlight-ex-add-cancel', attr: { title: 'Cancel' } });
+    const suggestions = editor.createDiv('spotlight-ex-suggestions');
     suggestions.style.display = 'none';
     let activeSuggestion = -1;
     let visibleSuggestions = [];
@@ -961,8 +963,8 @@ class SpotlightExpandedView extends BasesView {
       const duplicate = pendingValues.has(comparable)
         || currentValues.some((existing) => toComparableString(existing) === comparable);
       if (duplicate && this.plugin.settings.preventDuplicateListValues) {
-        input.addClass('spotlight-expanded-input-error');
-        input.ownerDocument.defaultView.setTimeout(() => input.removeClass('spotlight-expanded-input-error'), 350);
+        input.addClass('spotlight-ex-input-error');
+        input.ownerDocument.defaultView.setTimeout(() => input.removeClass('spotlight-ex-input-error'), 350);
         return;
       }
       const draft = input.value;
@@ -979,9 +981,9 @@ class SpotlightExpandedView extends BasesView {
       if (!editor.isConnected) return;
       if (!saved) {
         if (!input.value) input.value = draft || toComparableString(value);
-        input.addClass('spotlight-expanded-input-error');
+        input.addClass('spotlight-ex-input-error');
       } else {
-        input.removeClass('spotlight-expanded-input-error');
+        input.removeClass('spotlight-ex-input-error');
       }
       refreshSuggestions();
     };
@@ -1010,7 +1012,7 @@ class SpotlightExpandedView extends BasesView {
       }
       suggestions.style.display = 'block';
       candidates.forEach((candidate, index) => {
-        const item = suggestions.createDiv('spotlight-expanded-suggestion');
+        const item = suggestions.createDiv('spotlight-ex-suggestion');
         item.setText(type === 'tags' && this.plugin.settings.tagHashDisplay ? `#${candidate.replace(/^#/, '')}` : candidate);
         item.addEventListener('mousedown', (event) => event.preventDefault());
         item.addEventListener('click', () => submit(candidate));
@@ -1019,7 +1021,7 @@ class SpotlightExpandedView extends BasesView {
     };
 
     const setActiveSuggestion = (index) => {
-      const items = Array.from(suggestions.querySelectorAll('.spotlight-expanded-suggestion'));
+      const items = Array.from(suggestions.querySelectorAll('.spotlight-ex-suggestion'));
       items.forEach((el) => el.removeClass('is-active'));
       if (!items.length) return;
       activeSuggestion = (index + items.length) % items.length;
@@ -1093,11 +1095,11 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderCheckboxEditor(entry, key, rawValue, container) {
-    const row = container.createDiv('spotlight-expanded-checkbox-row');
-    const input = row.createEl('input', { type: 'checkbox', cls: 'spotlight-expanded-checkbox' });
+    const row = container.createDiv('spotlight-ex-checkbox-row');
+    const input = row.createEl('input', { type: 'checkbox', cls: 'spotlight-ex-checkbox' });
     input.checked = rawValue === true;
     input.indeterminate = rawValue == null;
-    const label = row.createSpan({ text: input.indeterminate ? 'No value' : (input.checked ? 'True' : 'False'), cls: 'spotlight-expanded-checkbox-label' });
+    const label = row.createSpan({ text: input.indeterminate ? 'No value' : (input.checked ? 'True' : 'False'), cls: 'spotlight-ex-checkbox-label' });
     input.addEventListener('change', async () => {
       input.indeterminate = false;
       label.setText(input.checked ? 'True' : 'False');
@@ -1106,7 +1108,7 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderScalarInput(entry, key, inputType, rawValue, container) {
-    const input = container.createEl('input', { type: inputType, cls: 'spotlight-expanded-scalar-input' });
+    const input = container.createEl('input', { type: inputType, cls: 'spotlight-ex-scalar-input' });
     const expectedType = inputType === 'datetime-local' ? 'datetime' : inputType;
     let initial = rawValue == null ? '' : String(rawValue);
     if (inputType === 'datetime-local' && initial) {
@@ -1149,7 +1151,7 @@ class SpotlightExpandedView extends BasesView {
 
   renderTextEditor(entry, key, rawValue, container) {
     const textarea = container.createEl('textarea', {
-      cls: 'spotlight-expanded-text-input',
+      cls: 'spotlight-ex-text-input',
       attr: { placeholder: 'Empty' },
     });
     textarea.value = rawValue == null ? '' : String(rawValue);
@@ -1235,9 +1237,9 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderComplexReadOnly(rawValue, container) {
-    container.addClass('spotlight-expanded-complex-readonly');
-    const msg = container.createDiv({ text: 'Complex YAML value — shown read-only to avoid changing its structure.', cls: 'spotlight-expanded-complex-note' });
-    const pre = container.createEl('pre', { cls: 'spotlight-expanded-complex-value' });
+    container.addClass('spotlight-ex-complex-readonly');
+    const msg = container.createDiv({ text: 'Complex YAML value — shown read-only to avoid changing its structure.', cls: 'spotlight-ex-complex-note' });
+    const pre = container.createEl('pre', { cls: 'spotlight-ex-complex-value' });
     try {
       pre.setText(JSON.stringify(rawValue, null, 2));
     } catch (_err) {
@@ -1246,7 +1248,7 @@ class SpotlightExpandedView extends BasesView {
   }
 
   renderReadOnlyValue(entry, propId, container) {
-    const valueEl = container.createDiv('spotlight-expanded-readonly-value');
+    const valueEl = container.createDiv('spotlight-ex-readonly-value');
     let value;
     try {
       value = entry.getValue(propId);
@@ -1260,24 +1262,24 @@ class SpotlightExpandedView extends BasesView {
     }
     const unwrapped = unwrapValue(value);
     if (Array.isArray(unwrapped)) {
-      const chips = valueEl.createDiv('spotlight-expanded-chip-list');
-      if (!unwrapped.length) chips.createSpan({ text: '—', cls: 'spotlight-expanded-empty-value' });
+      const chips = valueEl.createDiv('spotlight-ex-chip-list');
+      if (!unwrapped.length) chips.createSpan({ text: '—', cls: 'spotlight-ex-empty-value' });
       unwrapped.forEach((item) => {
-        const chip = chips.createDiv('spotlight-expanded-chip spotlight-expanded-chip-readonly');
-        chip.createSpan({ text: toComparableString(item), cls: 'spotlight-expanded-chip-label' });
+        const chip = chips.createDiv('spotlight-ex-chip spotlight-ex-chip-readonly');
+        chip.createSpan({ text: toComparableString(item), cls: 'spotlight-ex-chip-label' });
       });
       return;
     }
     const text = toComparableString(unwrapped);
     valueEl.setText(text || '—');
-    if (!text) valueEl.addClass('spotlight-expanded-empty-value');
+    if (!text) valueEl.addClass('spotlight-ex-empty-value');
   }
 
   renderHyperlinkProperty(entry, container, propId) {
     container.empty();
     const value = entry.getValue(propId);
     const text = this.formatValue(value) || '—';
-    const link = container.createDiv({ text, cls: 'spotlight-expanded-hyperlink-value' });
+    const link = container.createDiv({ text, cls: 'spotlight-ex-hyperlink-value' });
     link.title = 'Open current file (Ctrl/Cmd+Click for a new pane)';
     link.addEventListener('click', (event) => {
       if (!(entry.file instanceof TFile)) return;
@@ -1323,7 +1325,7 @@ class SpotlightExpandedView extends BasesView {
       });
       return { value: writtenValue };
     } catch (err) {
-      console.error('[Bases Spotlight View Expanded] Property write failed', err);
+      console.error('[Spotlight EX] Property write failed', err);
       new Notice(`Could not update property “${key}”.`);
       return null;
     }
@@ -1346,41 +1348,41 @@ class SpotlightExpandedView extends BasesView {
 
   renderFileContent(file, containerEl, token) {
     this.centerEl.removeClasses([
-      'spotlight-expanded-center-no-padding',
-      'spotlight-expanded-center-media-mode',
-      'spotlight-expanded-center-pdf-mode',
+      'spotlight-ex-center-no-padding',
+      'spotlight-ex-center-media-mode',
+      'spotlight-ex-center-pdf-mode',
     ]);
 
     const ext = file.extension.toLowerCase();
     const imageExtensions = new Set(['png', 'jpg', 'jpeg', 'gif', 'bmp', 'svg', 'webp', 'avif', 'heic', 'heif']);
 
     if (imageExtensions.has(ext)) {
-      this.centerEl.addClasses(['spotlight-expanded-center-no-padding', 'spotlight-expanded-center-media-mode']);
+      this.centerEl.addClasses(['spotlight-ex-center-no-padding', 'spotlight-ex-center-media-mode']);
       containerEl.empty();
-      containerEl.addClass('spotlight-expanded-center-media-container');
+      containerEl.addClass('spotlight-ex-center-media-container');
       const resourcePath = this.app.vault.getResourcePath(file);
-      containerEl.createEl('img', { attr: { src: resourcePath, alt: file.basename }, cls: 'spotlight-expanded-media' });
+      containerEl.createEl('img', { attr: { src: resourcePath, alt: file.basename }, cls: 'spotlight-ex-media' });
       return;
     }
 
     if (ext === 'pdf') {
-      this.centerEl.addClasses(['spotlight-expanded-center-no-padding', 'spotlight-expanded-center-pdf-mode']);
+      this.centerEl.addClasses(['spotlight-ex-center-no-padding', 'spotlight-ex-center-pdf-mode']);
       containerEl.empty();
-      containerEl.addClass('spotlight-expanded-center-pdf-container');
+      containerEl.addClass('spotlight-ex-center-pdf-container');
       this.app.vault.readBinary(file).then((buffer) => {
         if (this.renderToken !== token) return;
         const blob = new Blob([buffer], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         this.activePdfBlobUrls.push(url);
         containerEl.createEl('iframe', {
-          cls: 'spotlight-expanded-pdf-iframe',
+          cls: 'spotlight-ex-pdf-iframe',
           attr: { src: url, type: 'application/pdf', title: file.basename },
         });
       }).catch((err) => {
         console.error(err);
         if (this.renderToken !== token) return;
         containerEl.empty();
-        containerEl.createDiv({ text: `Could not load PDF content for ${file.name}.`, cls: 'spotlight-expanded-error-message' });
+        containerEl.createDiv({ text: `Could not load PDF content for ${file.name}.`, cls: 'spotlight-ex-error-message' });
       });
       return;
     }
@@ -1390,18 +1392,18 @@ class SpotlightExpandedView extends BasesView {
       containerEl.empty();
       containerEl.addClasses(['markdown-rendered', 'markdown-preview-view']);
       MarkdownRenderer.render(this.app, content, containerEl, file.path, this).catch((err) => {
-        console.error('[Bases Spotlight View Expanded] Markdown render failed', err);
+        console.error('[Spotlight EX] Markdown render failed', err);
       });
     }).catch((err) => {
       console.error(err);
       if (this.renderToken !== token) return;
       containerEl.empty();
-      containerEl.createDiv({ text: `Could not load content for ${file.name}.`, cls: 'spotlight-expanded-error-message' });
+      containerEl.createDiv({ text: `Could not load content for ${file.name}.`, cls: 'spotlight-ex-error-message' });
     });
   }
 }
 
-class BasesSpotlightExpandedSettingTab extends PluginSettingTab {
+class SpotlightEXSettingTab extends PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -1411,20 +1413,47 @@ class BasesSpotlightExpandedSettingTab extends PluginSettingTab {
   display() {
     const { containerEl } = this;
     containerEl.empty();
-    containerEl.addClass('spotlight-expanded-settings');
+    containerEl.addClass('spotlight-ex-settings');
 
-    containerEl.createEl('h2', { text: 'Bases Spotlight View Expanded' });
-    const tabs = containerEl.createDiv('spotlight-expanded-settings-tabs');
-    const generalTab = tabs.createEl('button', { text: 'General', cls: 'spotlight-expanded-settings-tab' });
-    const creditsTab = tabs.createEl('button', { text: 'Credits & License', cls: 'spotlight-expanded-settings-tab' });
+    containerEl.createEl('h2', { text: 'Spotlight EX' });
+    const tabs = containerEl.createDiv('spotlight-ex-settings-tabs');
+    const generalTab = tabs.createEl('button', { text: 'General', cls: 'spotlight-ex-settings-tab' });
+    const setupTab = tabs.createEl('button', { text: 'Setup', cls: 'spotlight-ex-settings-tab' });
+    const creditsTab = tabs.createEl('button', { text: 'Credits & License', cls: 'spotlight-ex-settings-tab' });
     generalTab.toggleClass('is-active', this.activeTab === 'general');
+    setupTab.toggleClass('is-active', this.activeTab === 'setup');
     creditsTab.toggleClass('is-active', this.activeTab === 'credits');
     generalTab.addEventListener('click', () => { this.activeTab = 'general'; this.display(); });
+    setupTab.addEventListener('click', () => { this.activeTab = 'setup'; this.display(); });
     creditsTab.addEventListener('click', () => { this.activeTab = 'credits'; this.display(); });
 
-    const body = containerEl.createDiv('spotlight-expanded-settings-body');
+    const body = containerEl.createDiv('spotlight-ex-settings-body');
     if (this.activeTab === 'credits') this.renderCredits(body);
+    else if (this.activeTab === 'setup') this.renderSetup(body);
     else this.renderGeneral(body);
+  }
+
+  renderSetup(containerEl) {
+    const guide = containerEl.createDiv('spotlight-ex-setup-guide');
+    guide.createEl('h3', { text: 'Configure a Base' });
+    const steps = guide.createEl('ol');
+    for (const step of [
+      'Enable Bases under Settings → Core plugins and Spotlight EX under Settings → Community plugins.',
+      'Open an existing .base file, or run “Bases: Create new base” from the command palette.',
+      'Click the view name at the top left → Add view. Name it, then choose Spotlight EX as its layout. To change an existing view, click the arrow beside its name (or right-click the view name) and select Spotlight EX under Layout.',
+      'Use Properties in the Base toolbar to choose the fields shown in the sidebar. Use Filter to limit the files and Sort to set their navigation order.',
+      'Open the view settings again to configure Spotlight Content Property and Hyperlink Property if needed.',
+    ]) steps.createEl('li', { text: step });
+
+    guide.createEl('h3', { text: 'Preview and navigation options' });
+    const options = guide.createEl('ul');
+    options.createEl('li', { text: 'Spotlight Content Property: select a property containing a [[wikilink]] to another file to preview. Leave it empty to preview the current entry.' });
+    options.createEl('li', { text: 'Hyperlink Property: select a displayed field whose value should open the current Base entry when clicked.' });
+    guide.createEl('p', { text: 'Use Previous / Next or the arrow keys to browse. Arrow keys inside property editors remain available for editing. If the Base is empty, check its filters.' });
+    guide.createEl('p', { text: 'Use the General tab here for editing preferences, suggestions, attachment sidecars, and sidebar width. Layout, displayed properties, filters, and sorting are configured separately for each Base view.' });
+    const link = guide.createEl('a', { text: 'Full setup guide on GitHub', href: `${REPOSITORY_URL}#configure-a-base` });
+    link.setAttr('target', '_blank');
+    link.setAttr('rel', 'noopener noreferrer');
   }
 
   renderGeneral(containerEl) {
@@ -1546,7 +1575,7 @@ class BasesSpotlightExpandedSettingTab extends PluginSettingTab {
         await this.plugin.saveSettings();
       });
       const el = button.extraSettingsEl;
-      el.addClass('spotlight-expanded-setting-reset');
+      el.addClass('spotlight-ex-setting-reset');
       el.setAttribute('role', 'button');
       el.setAttribute('aria-label', tooltip);
       el.tabIndex = 0;
@@ -1561,14 +1590,14 @@ class BasesSpotlightExpandedSettingTab extends PluginSettingTab {
 
   renderCredits(containerEl) {
     containerEl.createEl('h3', { text: 'Thanks & attribution' });
-    const credit = containerEl.createDiv('spotlight-expanded-credit-card');
+    const credit = containerEl.createDiv('spotlight-ex-credit-card');
     credit.createEl('p', {
-      text: 'Bases Spotlight View Expanded is a derivative of Bases Spotlight View by Brendan Early (mymindstorm). Thank you for creating and releasing the original plugin under the MIT License.',
+      text: 'Spotlight EX is a derivative of Bases Spotlight View by Brendan Early (mymindstorm). Thank you for creating and releasing the original plugin under the MIT License.',
     });
     const link = credit.createEl('a', {
       text: 'Original project on GitHub',
       href: UPSTREAM_URL,
-      cls: 'spotlight-expanded-upstream-link',
+      cls: 'spotlight-ex-upstream-link',
     });
     link.setAttr('target', '_blank');
     link.setAttr('rel', 'noopener noreferrer');
@@ -1577,12 +1606,12 @@ class BasesSpotlightExpandedSettingTab extends PluginSettingTab {
     containerEl.createEl('p', {
       text: 'The original copyright notice and permission notice are preserved below and in the bundled LICENSE file, as required by the MIT License.',
     });
-    const pre = containerEl.createEl('pre', { cls: 'spotlight-expanded-license-text' });
+    const pre = containerEl.createEl('pre', { cls: 'spotlight-ex-license-text' });
     pre.setText(ORIGINAL_MIT_LICENSE);
   }
 }
 
-module.exports = class BasesSpotlightExpandedPlugin extends Plugin {
+module.exports = class SpotlightEXPlugin extends Plugin {
   async onload() {
     this.views = new Set();
     await this.loadSettings();
@@ -1590,9 +1619,9 @@ module.exports = class BasesSpotlightExpandedPlugin extends Plugin {
     this.watchPropertyChanges();
 
     this.registerBasesView(VIEW_TYPE, {
-      name: 'Bases Spotlight View Expanded',
+      name: 'Spotlight EX',
       icon: 'presentation',
-      factory: (controller, containerEl) => new SpotlightExpandedView(controller, containerEl, this),
+      factory: (controller, containerEl) => new SpotlightEXView(controller, containerEl, this),
       options: () => [
         {
           type: 'property',
@@ -1609,7 +1638,7 @@ module.exports = class BasesSpotlightExpandedPlugin extends Plugin {
       ],
     });
 
-    this.addSettingTab(new BasesSpotlightExpandedSettingTab(this.app, this));
+    this.addSettingTab(new SpotlightEXSettingTab(this.app, this));
   }
 
   watchPropertyChanges() {
@@ -1656,7 +1685,7 @@ module.exports = class BasesSpotlightExpandedPlugin extends Plugin {
         }
       }
     } catch (err) {
-      console.warn('[Bases Spotlight View Expanded] Could not read types.json fallback', err);
+      console.warn('[Spotlight EX] Could not read types.json fallback', err);
     }
   }
 

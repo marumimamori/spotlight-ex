@@ -31,7 +31,7 @@ jobs:
 
       - name: Package manual installation
         run: |
-          zip -j bases-spotlight-view-expanded.zip \
+          zip -j spotlight-ex.zip \
             release/main.js release/manifest.json release/styles.css \
             release/LICENSE release/NOTICE.md release/README.md \
             release/UPSTREAM.md release/CHANGELOG.md release/versions.json
@@ -43,7 +43,7 @@ jobs:
           gh release create "$GITHUB_REF_NAME" --verify-tag \
             --title "$GITHUB_REF_NAME" --notes-file release/release-notes.md --draft \
             release/main.js release/manifest.json release/styles.css \
-            release/LICENSE release/NOTICE.md bases-spotlight-view-expanded.zip
+            release/LICENSE release/NOTICE.md spotlight-ex.zip
 
           if [[ "$GITHUB_REF_NAME" == *-* ]]; then
             gh release edit "$GITHUB_REF_NAME" --draft=false --prerelease

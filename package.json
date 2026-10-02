@@ -1,6 +1,6 @@
 {
-  "name": "obsidian-bases-spotlight-view-expanded",
-  "version": "0.1.7",
+  "name": "obsidian-spotlight-ex",
+  "version": "0.1.8",
   "description": "Expanded fork of Obsidian Bases Spotlight View with type-aware multi-value property editing.",
   "main": "main.js",
   "scripts": {
@@ -10,9 +10,9 @@
   },
   "keywords": ["obsidian", "bases", "metadata", "properties", "spotlight"],
   "author": { "name": "Maru", "url": "https://marumimamori.me/" },
-  "homepage": "https://github.com/marumimamori/bases-spotlight-view-expanded#readme",
-  "repository": { "type": "git", "url": "https://github.com/marumimamori/bases-spotlight-view-expanded.git" },
-  "bugs": { "url": "https://github.com/marumimamori/bases-spotlight-view-expanded/issues" },
+  "homepage": "https://github.com/marumimamori/spotlight-ex#readme",
+  "repository": { "type": "git", "url": "https://github.com/marumimamori/spotlight-ex.git" },
+  "bugs": { "url": "https://github.com/marumimamori/spotlight-ex/issues" },
   "license": "MIT",
   "type": "commonjs"
 }

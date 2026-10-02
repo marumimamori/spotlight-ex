@@ -1,8 +1,8 @@
-# Bases Spotlight View Expanded by [Maru](https://marumimamori.me/)
+# Spotlight EX by [Maru](https://marumimamori.me/)
 
 Browse notes, images, and PDFs in an Obsidian Base and edit their properties in a dedicated sidebar.
 
-**Current version:** `0.1.7`
+**Current version:** `0.1.8`
 
 **Original creator:** This is an expanded fork of [Obsidian Bases Spotlight View](https://github.com/mymindstorm/obsidian-bases-spotlight-view) by **Brendan Early / [mymindstorm](https://github.com/mymindstorm)**. The original MIT license and copyright notice are preserved.
 
@@ -29,17 +29,17 @@ Browse notes, images, and PDFs in an Obsidian Base and edit their properties in 
 1. Install **Obsidian42 - BRAT** from Obsidian's Community Plugins.
 2. Open the command palette.
 3. Run **BRAT: Add a beta plugin for testing**.
-4. Enter `https://github.com/marumimamori/bases-spotlight-view-expanded`.
-5. Choose the latest version, let BRAT install it, and enable **Bases Spotlight View Expanded** under **Settings > Community plugins**.
+4. Enter `https://github.com/marumimamori/spotlight-ex`.
+5. Choose the latest version, let BRAT install it, and enable **Spotlight EX** under **Settings > Community plugins**.
 
 [BRAT documentation](https://tfthacker.com/BRAT) explains installation and automatic updates.
 
 ### Manual Installation
 
-1. Download the install ZIP from the [latest release](https://github.com/marumimamori/bases-spotlight-view-expanded/releases/latest), or download `main.js`, `manifest.json`, and `styles.css` individually.
+1. Download the install ZIP from the [latest release](https://github.com/marumimamori/spotlight-ex/releases/latest), or download `main.js`, `manifest.json`, and `styles.css` individually.
 2. Create `<Vault>/.obsidian/plugins/bases-spotlight-view-expanded/`.
 3. Extract the ZIP into that folder, or copy the three plugin files into it.
-4. Reload Obsidian and enable **Bases Spotlight View Expanded** under **Settings > Community plugins**.
+4. Reload Obsidian and enable **Spotlight EX** under **Settings > Community plugins**.
 
 The ZIP also includes the license, attribution, and documentation.
 
@@ -53,9 +53,18 @@ The original Spotlight plugin is not required. This fork has its own plugin ID a
 
 ## Information
 
-### Open The Expanded Spotlight View
+### Configure A Base
 
-Open a Base and select **Bases Spotlight View Expanded** as a view's layout. Use **Previous**, **Next**, or the arrow keys to move through its results. Arrow keys inside property editors remain available for editing.
+1. Enable **Bases** under **Settings > Core plugins** and **Spotlight EX** under **Settings > Community plugins**.
+2. Open an existing `.base` file, or run **Bases: Create new base** from the command palette.
+3. Click the view name at the top left and choose **Add view**. Give it a name and select **Spotlight EX** as its layout.
+4. To change an existing view, click the arrow beside its name in that menu, or right-click the view name. Choose **Spotlight EX** under **Layout**.
+5. Use **Properties** in the Base toolbar to choose the fields shown in the sidebar. Use **Filter** to limit the files and **Sort** to set their navigation order.
+6. Open the view settings again to choose **Spotlight Content Property** and **Hyperlink Property**, if needed. See [Base View Options](#base-view-options) below.
+
+These instructions are also available under **Settings > Spotlight EX > Setup**. Obsidian's [Views guide](https://help.obsidian.md/bases/views) explains the Base toolbar and view settings.
+
+Use **Previous**, **Next**, or the arrow keys to move through results. Arrow keys inside property editors remain available for editing. If the Base is empty, check its filters.
 
 The center pane previews the selected file. The sidebar shows the properties configured for that Base view.
 
@@ -91,7 +100,9 @@ Drag a property name to reorder it. Resize the sidebar using its divider, or res
 
 Empty-value dashes and checkboxes align beneath their type icons using the icons' measured size and position. Type icons have a darker box normally and a lighter hover state.
 
-The settings page has **General** and **Credits & License** tabs. Every General setting has a reset arrow; hover to see the default, then click to restore that setting.
+Open **Settings > Spotlight EX**. **General** controls editing preferences and defaults, **Setup** explains how to configure a Base, and **Credits & License** preserves the original attribution. Every General setting has a reset arrow; hover to see the default, then click to restore that setting.
+
+Layout, visible properties, filters, sorting, and the preview options below are configured separately for each Base view using its toolbar.
 
 | Setting | Default |
 | --- | --- |
@@ -107,7 +118,7 @@ The settings page has **General** and **Credits & License** tabs. Every General 
 
 ### Base View Options
 
-- **Spotlight Content Property:** choose a property containing a normal `[[wikilink]]` to the file you want in the preview.
+- **Spotlight Content Property:** choose a property containing a normal `[[wikilink]]` to the file you want in the preview. Leave it empty to preview the current Base entry.
 - **Hyperlink Property:** choose a displayed property that opens the current Base entry when clicked.
 
 ---
@@ -151,7 +162,7 @@ Click a property's type icon and select **Date**. Spotlight switches to a date e
 
 - Standard editors, continuous entry, synchronization, formatting, and appearance changes are exercised in the included browser regression fixture with in-memory test metadata.
 - Obsidian's native property widget registry is an internal API. Native type integration and optional File/Folder/Property pickers can need adjustments after Obsidian updates.
-- The plugin was developed in English. Please report bugs with reproducible steps and your Obsidian version through [GitHub Issues](https://github.com/marumimamori/bases-spotlight-view-expanded/issues).
+- The plugin was developed in English. Please report bugs with reproducible steps and your Obsidian version through [GitHub Issues](https://github.com/marumimamori/spotlight-ex/issues).
 
 ## Original Creator And Thanks
 
@@ -165,11 +176,13 @@ The expanded fork is maintained by [Maru](https://marumimamori.me/). It is an in
 
 This plugin is still in beta. BRAT is the recommended distribution path while it is tested with real vaults before any wider Obsidian Community Plugin submission.
 
+The plugin was renamed to **Spotlight EX** in version `0.1.8`. Its internal plugin ID and saved view type remain `bases-spotlight-view-expanded` for compatibility, so existing settings and `.base` views continue working. Keep the existing plugin folder when updating, including its `data.json`. New manual installs also use the folder named in [Manual Installation](#manual-installation). The current BRAT repository is `marumimamori/spotlight-ex`.
+
 There is no telemetry in the plugin.
 
 ## License
 
-Bases Spotlight View Expanded is free software licensed under **MIT**.
+Spotlight EX is free software licensed under **MIT**.
 
 The original **Copyright (c) 2026 Brendan Early** notice and complete MIT permission notice are preserved in [LICENSE](LICENSE), included in release downloads, and displayed in **Credits & License**. Keep those notices when redistributing the plugin or a modified version.
 
@@ -195,4 +208,4 @@ node tests/serve.mjs
 
 Open the printed local URL and choose **Run regression tests**. The fixture uses the real plugin code and stylesheet with an in-memory Obsidian adapter; it does not modify vault files.
 
-For a future release, update the versions in `manifest.json` and `package.json`, add the version to `versions.json`, and update this README and [CHANGELOG.md](CHANGELOG.md). Build and verify the release, then push a matching tag such as `0.1.8` without a leading `v`. GitHub Actions publishes the BRAT files, license, attribution notice, and install ZIP.
+For a future release, update the versions in `manifest.json` and `package.json`, add the version to `versions.json`, and update this README and [CHANGELOG.md](CHANGELOG.md). Build and verify the release, then push a matching tag such as `0.1.9` without a leading `v`. GitHub Actions publishes the BRAT files, license, attribution notice, and install ZIP.
